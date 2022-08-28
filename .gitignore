@@ -3,6 +3,7 @@ coverage.txt
 .env
 api-keys
 dist
+remo-exporter
 
 # Created by https://www.gitignore.io/api/go,visualstudiocode
 
