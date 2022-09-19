@@ -1,6 +1,4 @@
-# Prometheus Nature Remo Exporter
-
-[![CircleCI](https://circleci.com/gh/kenfdev/remo-exporter.svg?style=svg)](https://circleci.com/gh/kenfdev/remo-exporter) [![codecov](https://codecov.io/gh/kenfdev/remo-exporter/branch/master/graph/badge.svg)](https://codecov.io/gh/kenfdev/remo-exporter)
+# Prometheus Nature Remo Exporter modified by BEAN
 
 Exposes Nature Remo and Nature Remo E lite devices metrics to Prometheus.
 

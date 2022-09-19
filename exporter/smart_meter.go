@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/kenfdev/remo-exporter/types"
+	"github.com/bean1310/remo-exporter/types"
 )
 
 const (

@@ -62,6 +62,7 @@ type Appliance struct {
 	Nickname   string      `json:"nickname"`
 	Image      string      `json:"image"`
 	SmartMeter *SmartMeter `json:"smart_meter"`
+	Settings   *Settings   `json:"settings`
 }
 
 type Model struct {
@@ -80,4 +81,12 @@ type EchonetliteProperty struct {
 	Epc       int       `json:"epc"`
 	Val       string    `json:"val"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type Settings struct {
+	Temp   string `json:temp`
+	Mode   string `json:mode`
+	Vol    string `json:vol`
+	Dir    string `json:dir`
+	Button string `json:button`
 }

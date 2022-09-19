@@ -5,9 +5,9 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
+	"github.com/bean1310/remo-exporter/types"
 	"github.com/kenfdev/remo-exporter/config"
 	"github.com/kenfdev/remo-exporter/log"
-	"github.com/kenfdev/remo-exporter/types"
 )
 
 const (
@@ -76,6 +76,12 @@ var (
 		[]string{"name", "id"}, nil,
 	)
 
+	acTargetTemp = prometheus.NewDesc(
+		prometheus.BuildFQName(namespace, "", "ac_terget_temp"),
+		"The setting temperature for an air conditioner",
+		[]string{"name", "id"}, nil,
+	)
+
 	rateLimitLimit = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "x_rate_limit_limit"),
 		"The rate limit for the remo API",
@@ -127,6 +133,7 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	ch <- electricEnergyUnit
 	ch <- electricEnergyDigits
 	ch <- measuredInstantaneousEnergy
+	ch <- acTargetTemp
 	ch <- rateLimitLimit
 	ch <- rateLimitReset
 	ch <- rateLimitRemaining
@@ -187,6 +194,18 @@ func (e *Exporter) processMetrics(devicesResult *types.GetDevicesResult, applian
 		ch <- prometheus.MustNewConstMetric(electricEnergyUnit, prometheus.GaugeValue, info.EnergyUnit, sm.Device.Name, sm.Device.ID)
 		ch <- prometheus.MustNewConstMetric(electricEnergyDigits, prometheus.GaugeValue, float64(info.EffectiveDigits), sm.Device.Name, sm.Device.ID)
 		ch <- prometheus.MustNewConstMetric(measuredInstantaneousEnergy, prometheus.GaugeValue, float64(info.MeasuredInstantaneous), sm.Device.Name, sm.Device.ID)
+	}
+
+	acs := getAirConditioners(appliancesResult.Appliances)
+	for _, ac := range acs {
+		info, err := airConditionerInfo(ac)
+		if err != nil {
+			log.Errorf("failed to get AC info: %w", err)
+			continue
+		}
+
+		ch <- prometheus.MustNewConstMetric(acTargetTemp, prometheus.GaugeValue, float64(info.TargetTemp), ac.Device.Name, ac.Device.ID)
+
 	}
 
 	if appliancesResult.Meta != nil {
